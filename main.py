@@ -1,3 +1,4 @@
+#TODO: Make a readme.md file with docs
 import requests
 from bs4 import BeautifulSoup
 import re
