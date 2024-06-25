@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-def error_handler(error: int):
+
+def error_handler(error: int) -> None:
     error_messages = {
         1: "Error to parse name of anime",
         2: "Error to parse eps. of anime",
@@ -11,7 +12,8 @@ def error_handler(error: int):
     
     print(error_messages.get(error, "Unknown error"))
 
-def parse(url: str):
+
+def parse(url: str) -> None:
     response = requests.get(url)
     
     if response.status_code == 200:
