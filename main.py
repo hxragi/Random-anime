@@ -1,17 +1,15 @@
-#TODO: Make a readme.md file with docs
 import requests
 from bs4 import BeautifulSoup
 import re
 
 def error_handler(error: int):
-    if error == 1:
-        print("Error to parse name of anime")
-    elif error == 2:
-        print("Error to parse eps. of anime")
-    elif error == 3:
-        print("Error to parse genres of anime")
-    else:
-        print("Unknown error")
+    error_messages = {
+        1: "Error to parse name of anime",
+        2: "Error to parse eps. of anime",
+        3: "Error to parse genres of anime"
+    }
+    
+    print(error_messages.get(error, "Unknown error"))
 
 def parse(url: str):
     response = requests.get(url)
@@ -28,11 +26,9 @@ def parse(url: str):
         genres_csv = ', '.join(genres)
 
         if anime_name and anime_eps and genres_csv:
-            print(f"Anime name: {anime_name}.")
-            print(f"Number of episodes: {number_ep} эпизодов.")
-            print(f"Genres: {genres_csv}.")
+            print(f"Anime name: {anime_name}. Number of episodes: {number_ep} серий. Genres: {genres_csv}.")
         else:
-            print("Error to print info about anime")
+            print("Error: Unable to print info about anime.")
             
     else:
         print(f"Unknown error. Error code: {response.status_code}")
