@@ -1,53 +1,83 @@
-# Anime Info Scraper
 
-This script scrapes information about an anime from a given URL. It fetches the anime's name, number of episodes, and genres, and prints them in a formatted manner.
+---
+
+# 🎬 Anime Info Scraper
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-green)
 
-## Features
+Скрипт парсит случайное аниме с [animego.org](https://animego.org/anime/random): название, количество серий и жанры. Работает с ошибками, делает повторные попытки и красиво всё выводит в консоль.
 
-- Fetches anime information from a given URL
-- Parses the anime name, number of episodes, and genres
-- Handles errors and prints appropriate error messages
+---
 
-## Example
+## ⚙️ Возможности
 
-To parse anime information, run the script:
+* Получает данные об аниме с animego.org
+* Парсит название, серии и жанры
+* Обрабатывает ошибки и логирует проблемы
+* Повторяет запросы при фейле
 
-```sh
+---
+
+## 🚀 Пример использования
+
+```bash
 python main.py
 ```
 
-## Motivation
+---
 
-This project was created to demonstrate how to scrape and parse web content using Python. It serves as an example of using requests for HTTP requests and BeautifulSoup for parsing HTML content.
+## 💡 Зачем это нужно
 
-## Requirements
+Проект создан как демонстрация:
 
-- Python 3.8+
-- requests 2.32.3
-- beautifulsoup4 4.12.3 
+* как делать HTTP-запросы (`requests`)
+* как парсить HTML (`BeautifulSoup`)
+* как структурировать простой парсер
+* как логировать и обрабатывать исключения
 
-## Installation and Usage
+---
 
-1. Clone the repository or download the script.
-2. Install the required packages:
-```sh
+## 📦 Зависимости
+
+* Python >= 3.8
+* `requests == 2.32.3`
+* `beautifulsoup4 == 4.12.3`
+
+---
+
+## 🔧 Установка
+
+```bash
 pip install requests beautifulsoup4
 ```
-3. Run the script:
-```sh
-python main.py
+
+---
+
+## 📁 Структура
+
+```text
+.
+├── main.py             # Главная логика
+├── http_client.py      # HTTP-запросы с повтором
+├── parsers.py          # Парсеры для имени, жанров, эпизодов
+├── errors.py           # Кастомные ошибки
+├── config.py           # Константы и селекторы
+├── LICENSE             # MIT лицензия
+└── README.md           # Документация
 ```
 
-## Contributors
+---
 
-To contribute to this project, you can create an issue or submit a pull request.
+## 📚 Полезные ссылки
 
-## Reference
-- [Python Official Documentation](https://docs.python.org/3/)
-- [Requests Documentation](https://requests.readthedocs.io/en/latest/)
-- [BeautifulSoup Documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+* [Python Docs](https://docs.python.org/3/)
+* [Requests](https://requests.readthedocs.io/en/latest/)
+* [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 
-## License
-- [MIT License](https://opensource.org/license/mit)
+---
+
+## 📝 Лицензия
+
+Проект распространяется по лицензии [MIT](./LICENSE).
+
+---
