@@ -1,42 +1,55 @@
-from requests import get
-from bs4 import BeautifulSoup
 from re import search
 
+from bs4 import BeautifulSoup
+from colorama import Fore, Style, init
 
-def error_handler(error: int) -> None:
-    error_messages = {
-        1: "Error to parse name of anime",
-        2: "Error to parse eps. of anime",
-        3: "Error to parse genres of anime"
-    }
+from clients import request
+from parsers import parse_anime_eps, parse_anime_genres, parse_anime_name
 
-    print(error_messages.get(error, "Unknown error"))
+init(autoreset=True)
 
-
-def parse(url: str) -> None:
-    response = get(url)
-
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        anime_name = soup.find('h1').get_text() if soup.find('h1') else error_handler(1)
-        anime_eps = soup.find(class_='col-3 col-sm-2 col-md text-truncate').get_text() if soup.find(
-            class_='col-3 col-sm-2 col-md text-truncate') else error_handler(2)
-        anime_genres = soup.find(class_='col-6 col-sm-8 mb-1 overflow-h').find_all('a') if soup.find(
-            class_='col-6 col-sm-8 mb-1 overflow-h') else error_handler(3)
-
-        genres = [link.text.strip() for link in anime_genres]
-        number_ep = search(r"\d+", anime_eps).group()
-        genres_csv = ', '.join(genres)
-
-        if anime_name and anime_eps and genres_csv:
-            print(f"Anime name: {anime_name}. Number of episodes: {number_ep} серий. Genres: {genres_csv}.")
-        else:
-            print("Error: Unable to print info about anime.")
-
-    else:
-        print(f"Unknown error. Error code: {response.status_code}")
+URL = "https://animego.org/anime/random"
 
 
-if __name__ == '__main__':
-    parse('https://animego.org/anime/random')
+class ParseError(Exception):
+    pass
+
+
+def parse(response) -> bool:
+    if not response:
+        print("Пустой ответ, парсить нечего...")
+        return False
+
+    soup = BeautifulSoup(response.content, "html.parser")
+
+    try:
+        anime_name = parse_anime_name(soup)
+        anime_eps = parse_anime_eps(soup)
+        anime_genres = parse_anime_genres(soup)
+    except ParseError as e:
+        print(f"Ошибка парсинга: {e}")
+        return False
+
+    number_ep_match = search(r"\d+", anime_eps)
+    number_ep = number_ep_match.group() if number_ep_match else "0"
+
+    genres_csv = ", ".join(anime_genres)
+
+    print(f"{Fore.CYAN}\n🎬 Информация об аниме 🎬{Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}Название:{Style.RESET_ALL} {anime_name}")
+    print(f"{Fore.GREEN}Серий:{Style.RESET_ALL} {number_ep}")
+    print(f"{Fore.MAGENTA}Жанры:{Style.RESET_ALL} {genres_csv}")
+    print(f"{Fore.CYAN}{'=' * 30}{Style.RESET_ALL}\n")
+
+    return True
+
+
+def main():
+    while True:
+        response = request(URL)
+        if parse(response):
+            break
+
+
+if __name__ == "__main__":
+    main()
