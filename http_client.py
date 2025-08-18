@@ -23,5 +23,5 @@ def request(
         else:
             logger.error("Ошибка HTTP: %s", response.status_code)
             return None
-    logger.error(f"Не удалось выполнить запрос после %s попыток.", retries)
+    logger.error("Не удалось выполнить запрос после %s попыток.", retries)
     return None
