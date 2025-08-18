@@ -1,7 +1,7 @@
 import time
 
-from main import logger
-from requests import get
+from utils import logger
+from types_request import get
 
 
 def request(
@@ -10,7 +10,7 @@ def request(
     delay=2,
 ):
     for i in range(retries):
-        response = get(url)
+        response = get(url, timeout=delay)
         if response.status_code == 200:
             return response
         if response.status_code == 429:
@@ -18,10 +18,10 @@ def request(
             time.sleep(delay * (2**i))
             continue
         if response.status_code in (500, 503):
-            logger.error(f"Серверная ошибка: {response.status_code}")
+            logger.error("Серверная ошибка: %s", response.status_code)
             continue
         else:
-            logger.error(f"Ошибка HTTP: {response.status_code}")
+            logger.error("Ошибка HTTP: %s", response.status_code)
             return None
-    logger.error(f"Не удалось выполнить запрос после {retries} попыток.")
+    logger.error(f"Не удалось выполнить запрос после %s попыток.", retries)
     return None

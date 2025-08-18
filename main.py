@@ -1,21 +1,18 @@
 from re import search
 from typing import List, Optional, Tuple
-import logging
 
 from bs4 import BeautifulSoup
-from colorama import Fore, Style, init
+from colorama import Fore, Style
 
 from config import BASE_URL
 from errors import NameParseError, EpisodesParseError, GenresParseError
 from http_client import request
 from parsers import parse_anime_eps, parse_anime_genres, parse_anime_name
 
-init(autoreset=True)
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from utils import logger
 
 
-def parse(response) -> Optional[Tuple[str, int, List[str]]]:
+def parse(response) -> Tuple[Optional[str], int, List[str]]:
     if response is None:
         logger.error("Ответ пустой или отсутствует контент")
         return None
@@ -27,13 +24,13 @@ def parse(response) -> Optional[Tuple[str, int, List[str]]]:
         anime_eps = parse_anime_eps(soup)
         anime_genres = parse_anime_genres(soup)
     except NameParseError as e:
-        logger.error(f"Ошибка парсинга названия: {e}, селектор: {e.selector}")
+        logger.error("Ошибка парсинга названия, селектор: %s", e.selector)
         return None
     except EpisodesParseError as e:
-        logger.error(f"Ошибка парсинга эпизодов: {e}, селектор: {e.selector}")
+        logger.error("Ошибка парсинга эпизодов, селектор: %s", e.selector)
         return None
     except GenresParseError as e:
-        logger.error(f"Ошибка парсинга жанров: {e}, селектор: {e.selector}")
+        logger.error("Ошибка парсинга жанров, селектор: %s", e.selector)
         return None
 
     number_ep = 0
@@ -63,7 +60,7 @@ def main(max_attempts=5):
             name, eps, genres = result
             print_anime_info(name, eps, genres)
             return
-    logger.error(f"Не удалось получить данные после {max_attempts} попыток.")
+    logger.error("Не удалось получить данные после %s попыток.", max_attempts)
     return None
 
 
