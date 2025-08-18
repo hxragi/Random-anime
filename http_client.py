@@ -1,7 +1,7 @@
 import time
 
 from utils import logger
-from types_request import get
+from requests import get
 
 
 def request(

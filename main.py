@@ -12,7 +12,7 @@ from parsers import parse_anime_eps, parse_anime_genres, parse_anime_name
 from utils import logger
 
 
-def parse(response) -> Tuple[Optional[str], int, List[str]]:
+def parse(response) -> Optional[Tuple[Optional[str], int, List[str]]]:
     if response is None:
         logger.error("Ответ пустой или отсутствует контент")
         return None
